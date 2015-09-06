@@ -9,6 +9,13 @@ N98_MAGERUN=${SCRIPT_ROOT}/n98-magerun.phar
 MODMAN=${SCRIPT_ROOT}/modman
 MODMAN_DIR=/html/.modman
 
+# check the --nodbupdate command line option
+dbupdate=true
+if [ "$1" = '--nodbupdate' ]
+then
+    dbupdate=false
+fi
+
 # check if all used commands are allowed in this environment (managed servers often block various commands)
 commands="git rm mv find ${MODMAN} php ${N98_MAGERUN}"
 
@@ -71,8 +78,11 @@ php ${N98_MAGERUN} cache:flush
 php ${SCRIPT_ROOT}/apc_clear_call.php --url=${HTML_URL} --htmlroot=${HTML_ROOT} --scriptroot=${SCRIPT_ROOT}
 
 # run install/upgrade scripts, so that they are executed only once
-echo '... running setup scripts ...'
-php ${N98_MAGERUN} sys:setup:run
+if [ "$dbupdate" = true ]
+then
+    echo '... running setup scripts ...'
+    php ${N98_MAGERUN} sys:setup:run
+fi
 
 # disable maintenance mode
 echo '... disabling maintenance mode ...'
