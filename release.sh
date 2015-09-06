@@ -50,6 +50,10 @@ cp ${SCRIPT_ROOT}/local.xml ${HTML_ROOT}-new/app/etc/local.xml
 # symlink media directory
 ln -s ${MEDIA_ROOT} ${HTML_ROOT}-new/media
 
+# clear the cache before enabling the maintenance mode to reduce the down time
+echo '... clearing the cache ...'
+php ${N98_MAGERUN} cache:flush
+
 # enable maintenance mode
 echo '... enabling maintenance mode ...'
 > ${HTML_ROOT}/maintenance.flag
