@@ -74,7 +74,8 @@ then
 fi
 
 # point directory to the new revision
-rm -rf ${HTML_ROOT}
+# since removing can take too long, first move and delete later to increase performance
+mv ${HTML_ROOT} ${HTML_ROOT}-old
 mv ${HTML_ROOT}-new ${HTML_ROOT}
 
 cd ${HTML_ROOT}
@@ -95,3 +96,7 @@ fi
 # disable maintenance mode
 echo '... disabling maintenance mode ...'
 rm maintenance.flag
+
+# delete old HTML root
+echo '... deleting old html root ...'
+rm -rf ${HTML_ROOT}-old
